@@ -9,7 +9,6 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
 /**
- * Created by buhe on 16/4/29.
  * A Pili Streaming View
  */
 public class CameraPreviewFrameView extends GLSurfaceView {
