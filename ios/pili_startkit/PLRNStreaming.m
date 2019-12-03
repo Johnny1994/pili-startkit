@@ -78,7 +78,7 @@ const char *networkStatus[] = {
 
 - (void) setSourceAndProfile{
     if(self.profile && self.rtmpURL){
-        
+
                 NSDictionary *video = self.profile[@"video"];
                 NSDictionary *audio = self.profile[@"audio"];
                 
@@ -131,6 +131,7 @@ const char *networkStatus[] = {
                         [self setMuted:_muted];
                     }
                 });
+        };
 
     }
 }
