@@ -72,8 +72,8 @@ export default class App extends Component {
       onIOError: () => this.logEvent('IOError'),
       onDisconnected: () => this.logEvent('Disconnected'),
       style: {
-        width: 100,
-        height: 100,
+        width: '100%',
+        height: 200,
         backgroundColor: 'red'
       },
     }
