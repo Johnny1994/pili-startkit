@@ -4,6 +4,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
+import com.pili_startkit.rnpili.PLStreamingViewManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +16,8 @@ public class PiliPackage implements ReactPackage {
   @Override
   public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
     return Arrays.asList(
-            new ReactImageManager()
+            new ReactImageManager(),
+            new PLStreamingViewManager()
     );
   }
 
