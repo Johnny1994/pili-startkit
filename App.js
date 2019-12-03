@@ -9,6 +9,7 @@ import { consts, Streaming } from './pili-react-native'
 export default class App extends Component {
 
   state = {
+    rtmpURL: 'rtmp://pili-publish.qnsdk.com/sdk-live/111',
     event: null,
     camera: 'front',
     muted: false,
