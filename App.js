@@ -13,15 +13,8 @@ import {
   ScrollView,
   View,
   Text,
-  StatusBar,
-  Button,
-  NativeModules,
-  requireNativeComponent,
+  StatusBar
 } from 'react-native';
-
-const ToastExample = NativeModules.ToastExample;
-
-const MyImageView = requireNativeComponent('MyImageView')
 
 import {
   Header,
@@ -31,11 +24,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const imageViewSources = [
-  {
-    uri: 'https://qiniu.staticfile.org/static/banner-d8c9407b1ec7626a9ec5a59a7f29f27b.jpg'
-  }
-]
+import Streaming from './pili-react-native/Streaming'
 
 const App: () => React$Node = () => {
   return (
@@ -53,8 +42,11 @@ const App: () => React$Node = () => {
           )}
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
-              <MyImageView src={imageViewSources} />
-              <Button title="Toast" onPress={() => ToastExample.show('Hey', ToastExample.SHORT)} />
+              <Streaming style={{
+                width: 100,
+                height: 100,
+                backgroundColor: 'red'
+              }} />
               <Text style={styles.sectionTitle}>Step One</Text>
               <Text style={styles.sectionDescription}>
                 Edit <Text style={styles.highlight}>App.js</Text> to change this
