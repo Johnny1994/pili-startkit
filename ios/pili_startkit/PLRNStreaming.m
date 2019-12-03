@@ -131,7 +131,6 @@ const char *networkStatus[] = {
                         [self setMuted:_muted];
                     }
                 });
-        };
 
     }
 }
