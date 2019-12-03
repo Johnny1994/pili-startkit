@@ -79,7 +79,6 @@ const char *networkStatus[] = {
 - (void) setSourceAndProfile{
     if(self.profile && self.rtmpURL){
         
-        void (^permissionBlock)(void) = ^{
                 NSDictionary *video = self.profile[@"video"];
                 NSDictionary *audio = self.profile[@"audio"];
                 
@@ -131,18 +130,7 @@ const char *networkStatus[] = {
                     if(_muted){
                         [self setMuted:_muted];
                     }
-                    
-                    [self startSession];
                 });
-        };
-        void (^noAccessBlock)(void) = ^{
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No Access", nil)
-                                                                message:NSLocalizedString(@"!", nil)
-                                                               delegate:nil
-                                                      cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                                      otherButtonTitles:nil];
-            [alertView show];
-        };
 
     }
 }
@@ -208,11 +196,6 @@ const char *networkStatus[] = {
           NSLog(@"success ");
         });
   }];
-//        [self.session startWithPushURL:streamURL feedback:^(PLStreamStartStateFeedback feedback) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                NSLog(@"success ");
-//            });
-//        }];
 }
 
 - (void)mediaStreamingSession:(PLMediaStreamingSession *)session streamStatusDidUpdate:(PLStreamStatus *)status {
