@@ -3,15 +3,18 @@
  */
 
 import React, { Component } from 'react'
-import { SafeAreaView, Text, StatusBar, ScrollView, Button } from 'react-native'
+import { SafeAreaView, Text, StatusBar, ScrollView, Button, Platform, PermissionsAndroid } from 'react-native'
 import { consts, Streaming } from './pili-react-native'
+
+const isAndroid = Platform.OS === 'android'
 
 export default class App extends Component {
 
   state = {
+    androidPermissionGranted: false,
     event: null,
     rtmpURL: 'rtmp://pili-publish.qnsdk.com/sdk-live/111',
-    camera: 'front',
+    camera: 'back',
     muted: false,
     zoom: 1,
     focus: false,
@@ -56,22 +59,41 @@ export default class App extends Component {
 
   logEvent = event => this.setState({ event })
 
+  componentDidMount() {
+    if (isAndroid) {
+      PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE,
+        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION
+      ]).then(() => {
+        this.setState({ androidPermissionGranted: true })
+      })
+    }
+  }
+
   render() {
-    const { event, ...streamingConfig } = this.state
+    const { androidPermissionGranted, event, ...streamingConfig } = this.state
+    if (isAndroid && !androidPermissionGranted) {
+      return (
+        <>
+          <StatusBar barStyle="dark-content" />
+          <SafeAreaView style={{ display: 'flex', flex: 1, backgroundColor: '#fff' }}>
+            <Text>Permission not granted</Text>
+          </SafeAreaView>
+        </>
+      )
+    }
+
     const eventText = (
       this.state.event != null
-      ? this.state.event
+      ? JSON.stringify(this.state.event)
       : 'none'
     )
     const props = {
       ...streamingConfig,
-      onReady: () => this.logEvent('Ready'),
-      onConnecting: () => this.logEvent('Connecting'),
-      onStreaming: () => this.logEvent('Streaming'),
-      onShutdown: () => this.logEvent('Shutdown'),
-      onError: () => this.logEvent('Error'),
-      onIOError: () => this.logEvent('IOError'),
-      onDisconnected: () => this.logEvent('Disconnected'),
+      onStateChange: e => this.logEvent(e.nativeEvent),
       style: {
         width: '100%',
         height: 200,
