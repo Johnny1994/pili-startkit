@@ -75,7 +75,7 @@ export default class App extends Component {
       style: {
         width: '100%',
         height: 200,
-        backgroundColor: 'red'
+        backgroundColor: 'transparent'
       },
     }
     const toggleStartBtnText = this.state.started ? 'Stop' : 'Start'
@@ -84,8 +84,6 @@ export default class App extends Component {
       <>
         <StatusBar barStyle="dark-content" />
         <SafeAreaView style={{ display: 'flex', flex: 1 }}>
-          <Text>Pili@ReactNative</Text>
-          <Text>Event: {eventText}</Text>
           <Streaming {...props} />
           <Button onPress={this.switchCamera} title="Switch camera" />
           <Button onPress={this.toggleMuted} title="Toggle muted" />
@@ -93,7 +91,9 @@ export default class App extends Component {
           <Button onPress={this.zoomOut} title="Zoom out" />
           <Button onPress={this.toggleFocus} title="Toggle focus" />
           <Button onPress={this.toggleStarted} title={toggleStartBtnText} />
-          <ScrollView style={{ flex: 1 }}>
+          <ScrollView style={{ flex: 1, backgroundColor : 'white'}}>
+            <Text>Pili@ReactNative</Text>
+            <Text>Event: {eventText}</Text>
             <Text>Props: </Text>
             <Text>{propsText}</Text>
           </ScrollView>
