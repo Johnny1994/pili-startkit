@@ -18,7 +18,7 @@ export default function Streaming(props) {
 }
 
 Streaming.propTypes = {
-  rtmpURL: PropTypes.string,
+  rtmpURL: PropTypes.string.isRequired,
   camera: PropTypes.oneOf(['front','back']),
   muted: PropTypes.bool,
   zoom: PropTypes.number,
@@ -37,12 +37,6 @@ Streaming.propTypes = {
   }).isRequired,
   started: PropTypes.bool,
 
-  onReady: PropTypes.func,
-  onConnecting: PropTypes.func,
-  onStreaming: PropTypes.func,
-  onShutdown: PropTypes.func,
-  onError: PropTypes.func,
-  onIOError: PropTypes.func,
-  onDisconnected: PropTypes.func,
+  onStateChange: PropTypes.func,
   ...View.propTypes
 }

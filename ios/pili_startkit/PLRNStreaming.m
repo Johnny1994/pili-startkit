@@ -219,29 +219,28 @@ const char *networkStatus[] = {
     
     switch (state) {
         case PLStreamStateUnknow:
-//            [_eventDispatcher sendInputEventWithName:@"onLoading" body:@{@"target": self.reactTag}];
-        self.onStateChange(@{@"state":@"onReady"});
+
+        self.onStateChange(@{@"state":@(0)});
             break;
         case PLStreamStateConnecting:
-//            [_eventDispatcher sendInputEventWithName:@"onConnecting" body:@{@"target": self.reactTag}];
-        self.onStateChange(@{@"state":@"onConnecting"});
+
+        self.onStateChange(@{@"state":@(1)});
             break;
         case PLStreamStateConnected:
-//            [_eventDispatcher sendInputEventWithName:@"onStreaming" body:@{@"target": self.reactTag}];
-        self.onStateChange(@{@"state":@"onStreaming"});
+
+        self.onStateChange(@{@"state":@(2)});
             break;
         case PLStreamStateDisconnecting:
 
             break;
-//        case PLStreamStateDisconnected:
-//            [_eventDispatcher sendInputEventWithName:@"onDisconnected" body:@{@"target": self.reactTag}];
-//            [_eventDispatcher sendInputEventWithName:@"onShutdown" body:@{@"target": self.reactTag}]; //FIXME
-        self.onStateChange(@{@"state":@"onShutdown"});
-        self.onStateChange(@{@"state":@"onDisconnected"});
+        case PLStreamStateDisconnected:
+        
+        self.onStateChange(@{@"state":@(3)});
+        self.onStateChange(@{@"state":@(5)});
             break;
         case PLStreamStateError:
-//            [_eventDispatcher sendInputEventWithName:@"onIOError" body:@{@"target": self.reactTag}];
-        self.onStateChange(@{@"state":@"onError"});
+
+        self.onStateChange(@{@"state":@(4),@"target": self.reactTag});
             break;
         default:
             break;
