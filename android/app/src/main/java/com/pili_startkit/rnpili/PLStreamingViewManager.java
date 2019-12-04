@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -34,6 +35,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,7 +45,8 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         StreamingSessionListener,
         StreamingStateChangedListener,
         LifecycleEventListener {
-    private static final String TAG = "PLRNMediaStreaming";
+    private static final String TAG = "PLStreamingViewManager";
+    private static final String EXPORT_COMPONENT_NAME = "PLRNMediaStreaming";
 
     private ThemedReactContext mReactContext;
     private RCTEventEmitter mEventEmitter;
@@ -65,7 +68,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         CONNECTING("onConnecting"),
         STREAMING("onStreaming"),
         SHUTDOWN("onShutdown"),
-        IOERROR("onIOError"),
+        IOERROR("onError"),
         DISCONNECTED("onDisconnected");
 
         private final String mName;
@@ -83,12 +86,13 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     @NonNull
     @Override
     public String getName() {
-        return TAG;
+        return EXPORT_COMPONENT_NAME;
     }
 
     @NonNull
     @Override
     protected CameraPreviewFrameView createViewInstance(@NonNull ThemedReactContext reactContext) {
+        Log.i(TAG, "createViewInstance");
         StreamingEnv.init(reactContext);
 
         mReactContext = reactContext;
@@ -100,6 +104,17 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         initStreamingManager(mCameraPreviewFrameView);
         mReactContext.addLifecycleEventListener(this);
         return mCameraPreviewFrameView;
+    }
+
+    @Nullable
+    @Override
+    public Map getExportedCustomBubblingEventTypeConstants() {
+        return MapBuilder.builder()
+                .put(Events.READY.toString(),
+                        MapBuilder.of(
+                                "phasedRegistrationNames",
+                                MapBuilder.of("bubbled", "onReady")))
+                .build();
     }
 
     @ReactProp(name = "profile")
@@ -181,18 +196,23 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
 
     @Override
     public void onHostResume() {
-        Log.i(TAG, "resume");
-        mMediaStreamingManager.resume();
+        Log.i(TAG, "onResume");
+        if (mMediaStreamingManager != null) {
+            mMediaStreamingManager.resume();
+        }
     }
 
     @Override
     public void onHostPause() {
+        Log.i(TAG, "onPause");
         mMediaStreamingManager.pause();
     }
 
     @Override
     public void onHostDestroy() {
+        Log.i(TAG, "onDestroy");
         mMediaStreamingManager.destroy();
+        mMediaStreamingManager = null;
     }
 
     @Override
@@ -294,14 +314,12 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
             StreamingProfile.AVProfile avProfile = new StreamingProfile.AVProfile(vProfile, aProfile);
             mProfile.setVideoQuality(StreamingProfile.VIDEO_QUALITY_HIGH3)
                     .setAudioQuality(StreamingProfile.AUDIO_QUALITY_MEDIUM2)
-//                .setPreferredVideoEncodingSize(960, 544)
                     .setEncodingSizeLevel(StreamingProfile.VIDEO_ENCODING_HEIGHT_480)
                     .setEncoderRCMode(StreamingProfile.EncoderRCModes.QUALITY_PRIORITY)
-//                    .setStream(stream)   //set Stream
                     .setAVProfile(avProfile)
                     .setDnsManager(getMyDnsManager())
                     .setStreamStatusConfig(new StreamingProfile.StreamStatusConfig(3))
-//                .setEncodingOrientation(StreamingProfile.ENCODING_ORIENTATION.PORT)
+                    .setEncodingOrientation(StreamingProfile.ENCODING_ORIENTATION.PORT)
                     .setSendingBufferProfile(new StreamingProfile.SendingBufferProfile(0.2f, 0.8f, 3.0f, 20 * 1000));
 
             mCameraStreamingSetting = new CameraStreamingSetting();
