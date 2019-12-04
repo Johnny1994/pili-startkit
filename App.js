@@ -86,11 +86,8 @@ export default class App extends Component {
       )
     }
 
-    const eventText = (
-      this.state.event != null
-      ? JSON.stringify(this.state.event)
-      : 'none'
-    )
+    const eventText = this.state.event != null ? JSON.stringify(this.state.event) : 'none'
+    const stateText = this.state.event != null ? this.state.event.state : 'none'
     const props = {
       ...streamingConfig,
       onStateChange: e => this.logEvent(e.nativeEvent),
@@ -116,6 +113,7 @@ export default class App extends Component {
           <ScrollView style={{ flex: 1, backgroundColor : 'white'}}>
             <Text>Pili@ReactNative</Text>
             <Text>Event: {eventText}</Text>
+            <Text>State: {stateText}</Text>
             <Text>Props: </Text>
             <Text>{propsText}</Text>
           </ScrollView>
