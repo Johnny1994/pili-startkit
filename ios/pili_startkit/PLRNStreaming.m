@@ -10,6 +10,13 @@
 #import <React/RCTBridgeModule.h>
 #import <React/UIView+React.h>
 #import <React/RCTEventDispatcher.h>
+#import <React/RCTComponent.h>
+
+@interface PLRNStreaming()
+
+@property (nonatomic, copy) RCTDirectEventBlock onStateChange;
+
+@end
 
 @implementation PLRNStreaming{
     RCTEventDispatcher *_eventDispatcher;
@@ -206,31 +213,38 @@ const char *networkStatus[] = {
 - (void)mediaStreamingSession:(PLMediaStreamingSession *)session streamStateDidChange:(PLStreamState)state {
     NSString *log = [NSString stringWithFormat:@"Stream State: %s", stateNames[state]];
     NSLog(@"%@", log);
+  if (!self.onStateChange) {
+    return;
+  }
     
-//    switch (state) {
-//        case PLStreamStateUnknow:
-//            [_eventDispatcher sendInputEventWithName:@"onLoading" body:@{@"target": self.reactTag}];
-//        [_eventDispatcher sendTextEventWithType:RCTTextEventTypeFocus reactTag:self.reactTag text:<#(NSString *)#> key:<#(NSString *)#> eventCount:<#(NSInteger)#>]
-//            break;
-//        case PLStreamStateConnecting:
-//            [_eventDispatcher sendInputEventWithName:@"onConnecting" body:@{@"target": self.reactTag}];
-//            break;
-//        case PLStreamStateConnected:
-//            [_eventDispatcher sendInputEventWithName:@"onStreaming" body:@{@"target": self.reactTag}];
-//            break;
-//        case PLStreamStateDisconnecting:
-//
-//            break;
-//        case PLStreamStateDisconnected:
-//            [_eventDispatcher sendInputEventWithName:@"onDisconnected" body:@{@"target": self.reactTag}];
-//            [_eventDispatcher sendInputEventWithName:@"onShutdown" body:@{@"target": self.reactTag}]; //FIXME
-//            break;
-//        case PLStreamStateError:
-//            [_eventDispatcher sendInputEventWithName:@"onIOError" body:@{@"target": self.reactTag}];
-//            break;
-//        default:
-//            break;
-//    }
+    switch (state) {
+        case PLStreamStateUnknow:
+
+        self.onStateChange(@{@"state":@(0)});
+            break;
+        case PLStreamStateConnecting:
+
+        self.onStateChange(@{@"state":@(1)});
+            break;
+        case PLStreamStateConnected:
+
+        self.onStateChange(@{@"state":@(2)});
+            break;
+        case PLStreamStateDisconnecting:
+
+            break;
+        case PLStreamStateDisconnected:
+        
+        self.onStateChange(@{@"state":@(3)});
+        self.onStateChange(@{@"state":@(5)});
+            break;
+        case PLStreamStateError:
+
+        self.onStateChange(@{@"state":@(4),@"target": self.reactTag});
+            break;
+        default:
+            break;
+    }
 
 }
 - (void)mediaStreamingSession:(PLMediaStreamingSession *)session didDisconnectWithError:(NSError *)error {
