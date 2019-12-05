@@ -17,9 +17,6 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* pili_startkitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* pili_startkitTests.m */; };
-		9C68C7862396157800569604 /* PLRNStreaming.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C68C7852396157800569604 /* PLRNStreaming.m */; };
-		9C68C78E23963F3100569604 /* PLRNViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C68C78B23963F3100569604 /* PLRNViewManager.m */; };
-		9C68C78F23963F3100569604 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C68C78C23963F3100569604 /* Reachability.m */; };
 		AAC22C1B97A5DEF1828926FA /* libPods-pili_startkit-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F7EC18BFF7AB5056CEA160FA /* libPods-pili_startkit-tvOSTests.a */; };
 		D0C1FCE93EF6745F9BCA296B /* libPods-pili_startkit-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EF02FE85B20E24988ACDCFFC /* libPods-pili_startkit-tvOS.a */; };
 		FD0C4197EC2C402988FBAECA /* libPods-pili_startkitTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 99336E075756A6289C18792A /* libPods-pili_startkitTests.a */; };
@@ -62,12 +59,6 @@
 		6C9AD8217CCBE476D16629F0 /* Pods-pili_startkit-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pili_startkit-tvOS.release.xcconfig"; path = "Target Support Files/Pods-pili_startkit-tvOS/Pods-pili_startkit-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		93BF5027C9B4D761E81CF447 /* Pods-pili_startkit-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pili_startkit-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-pili_startkit-tvOSTests/Pods-pili_startkit-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		99336E075756A6289C18792A /* libPods-pili_startkitTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-pili_startkitTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C68C7842396157800569604 /* PLRNStreaming.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PLRNStreaming.h; path = pili_startkit/PLRNStreaming.h; sourceTree = "<group>"; };
-		9C68C7852396157800569604 /* PLRNStreaming.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PLRNStreaming.m; path = pili_startkit/PLRNStreaming.m; sourceTree = "<group>"; };
-		9C68C78A23963F3100569604 /* PLRNViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PLRNViewManager.h; path = pili_startkit/PLRNViewManager.h; sourceTree = "<group>"; };
-		9C68C78B23963F3100569604 /* PLRNViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PLRNViewManager.m; path = pili_startkit/PLRNViewManager.m; sourceTree = "<group>"; };
-		9C68C78C23963F3100569604 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = pili_startkit/Reachability.m; sourceTree = "<group>"; };
-		9C68C78D23963F3100569604 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = pili_startkit/Reachability.h; sourceTree = "<group>"; };
 		C8E083E64FEFCD5C99B3451B /* Pods-pili_startkit-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pili_startkit-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-pili_startkit-tvOS/Pods-pili_startkit-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		DCA416919AA28661BB7349CD /* libPods-pili_startkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-pili_startkit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -137,12 +128,6 @@
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
-				9C68C78A23963F3100569604 /* PLRNViewManager.h */,
-				9C68C78B23963F3100569604 /* PLRNViewManager.m */,
-				9C68C78D23963F3100569604 /* Reachability.h */,
-				9C68C78C23963F3100569604 /* Reachability.m */,
-				9C68C7842396157800569604 /* PLRNStreaming.h */,
-				9C68C7852396157800569604 /* PLRNStreaming.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
@@ -568,11 +553,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C68C7862396157800569604 /* PLRNStreaming.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				9C68C78E23963F3100569604 /* PLRNViewManager.m in Sources */,
-				9C68C78F23963F3100569604 /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
