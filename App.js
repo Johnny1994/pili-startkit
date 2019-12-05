@@ -4,7 +4,7 @@
 
 import React, { Component } from 'react'
 import { SafeAreaView, Text, StatusBar, ScrollView, Button, Platform, PermissionsAndroid } from 'react-native'
-import { consts, Streaming } from './pili-react-native-test'
+import { consts, Streaming } from 'pili-streaming-react-native'
 
 const isAndroid = Platform.OS === 'android'
 

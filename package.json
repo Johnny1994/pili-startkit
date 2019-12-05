@@ -10,7 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "pili-react-native-test": "^0.0.1",
+    "pili-streaming-react-native": "git+ssh://git@github.com/pili-engineering/pili-streaming-react-native.git#v0.0.2",
     "prop-types": "^15.7.2",
     "react": "16.9.0",
     "react-native": "0.61.5"
