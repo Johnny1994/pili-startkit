@@ -58,8 +58,8 @@ export default class App extends Component {
     started: !this.state.started
   })
 
-  handleStateUpdate = state => this.setState({ state })
-  updateStreamInfo = streamInfo => this.setState({ streamInfo })
+  handleStateChange = state => this.setState({ state })
+  handleStreamInfoChange = streamInfo => this.setState({ streamInfo })
 
   componentDidMount() {
     if (isAndroid) {
@@ -76,7 +76,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { androidPermissionGranted, event, ...streamingConfig } = this.state
+    const { androidPermissionGranted, state, streamInfo, ...streamingConfig } = this.state
     if (isAndroid && !androidPermissionGranted) {
       return (
         <>
@@ -88,11 +88,12 @@ export default class App extends Component {
       )
     }
 
-    const stateText = this.state.state != null ? this.state.state : 'none'
-    const streamInfoText = this.state.streamInfo != null ? JSON.stringify(this.state.streamInfo) : 'none'
+    const stateText = state != null ? state : 'none'
+    const streamInfoText = streamInfo != null ? JSON.stringify(streamInfo) : 'none'
     const props = {
       ...streamingConfig,
-      onStateChange: this.handleStateUpdate,
+      onStateChange: this.handleStateChange,
+      onStreamInfoChange: this.handleStreamInfoChange,
       style: {
         width: '100%',
         height: 200,
