@@ -5022,9 +5022,10 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-"pili-streaming-react-native@https://github.com/pili-engineering/pili-streaming-react-native#v0.0.2":
-  version "0.0.2"
-  resolved "https://github.com/pili-engineering/pili-streaming-react-native#75554b8d2841bb88e9129a5ebf23906ab83d36f2"
+pili-streaming-react-native@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/pili-streaming-react-native/-/pili-streaming-react-native-1.0.0.tgz#38d97b9c68b8fc51cd3b3dbe8df6646ef5d93c72"
+  integrity sha512-i19gh1JLG1w28/Igtz678z2+3c1MgfNNYxUCAni8soNHw+FGyo2b8XNZo0tLADtc3Keth7FmXRChtakpYpQbPg==
 
 pirates@^4.0.0, pirates@^4.0.1:
   version "4.0.1"
