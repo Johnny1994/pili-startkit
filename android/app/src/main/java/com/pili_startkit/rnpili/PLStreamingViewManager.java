@@ -51,6 +51,8 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     private static final String TAG = "PLStreamingViewManager";
     private static final String EXPORT_COMPONENT_NAME = "PLRNMediaStreaming";
 
+    private static final String STATE = "state";
+
     private ThemedReactContext mReactContext;
     private RCTEventEmitter mEventEmitter;
 
@@ -282,27 +284,28 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
                 if (mIsStarted) {
                     startStreaming();
                 }
-                event.putInt("state", Events.READY.ordinal());
+                event.putInt(STATE, Events.READY.ordinal());
                 mEventEmitter.receiveEvent(getTargetId(), Events.READY.toString(), event);
                 break;
             case CONNECTING:
-                event.putString("state", Events.CONNECTING.toString());
+                event.putInt(STATE, Events.CONNECTING.ordinal());
                 mEventEmitter.receiveEvent(getTargetId(), Events.CONNECTING.toString(), event);
                 break;
             case STREAMING:
-                event.putString("state", Events.STREAMING.toString());
+                event.putInt(STATE, Events.STREAMING.ordinal());
                 mEventEmitter.receiveEvent(getTargetId(), Events.STREAMING.toString(), event);
                 break;
             case SHUTDOWN:
-                event.putString("state", Events.SHUTDOWN.toString());
+                event.putInt(STATE, Events.SHUTDOWN.ordinal());
                 mEventEmitter.receiveEvent(getTargetId(), Events.SHUTDOWN.toString(), event);
                 break;
             case IOERROR:
-                event.putString("state", Events.IOERROR.toString());
+                event.putInt(STATE, Events.IOERROR.ordinal());
                 mEventEmitter.receiveEvent(getTargetId(), Events.IOERROR.toString(), event);
                 break;
             case DISCONNECTED:
-                mEventEmitter.receiveEvent(getTargetId(), Events.DISCONNECTED.toString(), Arguments.createMap());
+                event.putInt(STATE, Events.DISCONNECTED.ordinal());
+                mEventEmitter.receiveEvent(getTargetId(), Events.DISCONNECTED.toString(), event);
                 break;
         }
     }
