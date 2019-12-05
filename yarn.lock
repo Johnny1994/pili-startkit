@@ -5022,6 +5022,11 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
+pili-react-native-test@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/pili-react-native-test/-/pili-react-native-test-0.0.1.tgz#910fd58cd1dc5cdd96f9b7edafcc8dbd14ced884"
+  integrity sha512-Llb7/m97VihimxwQBVP35kH2w8vRo+9XGYKeARxMNjcbxLmnDrJX7ftiFP8X66C0hRQl1vQvcZ8/PMRqTixNyg==
+
 pirates@^4.0.0, pirates@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.1.tgz#643a92caf894566f91b2b986d2c66950a8e2fb87"

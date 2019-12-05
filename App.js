@@ -4,7 +4,7 @@
 
 import React, { Component } from 'react'
 import { SafeAreaView, Text, StatusBar, ScrollView, Button, Platform, PermissionsAndroid } from 'react-native'
-import { consts, Streaming } from './pili-react-native'
+import { consts, Streaming } from './pili-react-native-test'
 
 const isAndroid = Platform.OS === 'android'
 
@@ -22,8 +22,8 @@ export default class App extends Component {
     profile: {
       video: {
         fps: 30,
-        bps: 100 * 1024,
-        maxFrameInterval: 48
+        bps: 800 * 1024,
+        maxFrameInterval: 60
       },
       audio: {
         rate: 44100,
