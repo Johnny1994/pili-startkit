@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -25,6 +26,7 @@ import com.qiniu.pili.droid.streaming.AVCodecType;
 import com.qiniu.pili.droid.streaming.CameraStreamingSetting;
 import com.qiniu.pili.droid.streaming.MediaStreamingManager;
 import com.qiniu.pili.droid.streaming.MicrophoneStreamingSetting;
+import com.qiniu.pili.droid.streaming.StreamStatusCallback;
 import com.qiniu.pili.droid.streaming.StreamingEnv;
 import com.qiniu.pili.droid.streaming.StreamingProfile;
 import com.qiniu.pili.droid.streaming.StreamingSessionListener;
@@ -44,6 +46,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
         CameraPreviewFrameView.Listener,
         StreamingSessionListener,
         StreamingStateChangedListener,
+        StreamStatusCallback,
         LifecycleEventListener {
     private static final String TAG = "PLStreamingViewManager";
     private static final String EXPORT_COMPONENT_NAME = "PLRNMediaStreaming";
@@ -51,7 +54,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     private ThemedReactContext mReactContext;
     private RCTEventEmitter mEventEmitter;
 
-    protected MediaStreamingManager mMediaStreamingManager;
+    private MediaStreamingManager mMediaStreamingManager;
     private CameraPreviewFrameView mCameraPreviewFrameView;
     private StreamingProfile mProfile;
     private CameraStreamingSetting mCameraStreamingSetting;
@@ -64,23 +67,13 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     private int mMaxZoom = 0;
 
     public enum Events {
-        READY("onReady"),
-        CONNECTING("onConnecting"),
-        STREAMING("onStreaming"),
-        SHUTDOWN("onShutdown"),
-        IOERROR("onError"),
-        DISCONNECTED("onDisconnected");
-
-        private final String mName;
-
-        Events(final String name) {
-            mName = name;
-        }
-
-        @Override
-        public String toString() {
-            return mName;
-        }
+        READY,
+        CONNECTING,
+        STREAMING,
+        SHUTDOWN,
+        IOERROR,
+        DISCONNECTED,
+        STREAM_INFO_CHANGE;
     }
 
     @NonNull
@@ -92,7 +85,6 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     @NonNull
     @Override
     protected CameraPreviewFrameView createViewInstance(@NonNull ThemedReactContext reactContext) {
-        Log.i(TAG, "createViewInstance");
         StreamingEnv.init(reactContext);
 
         mReactContext = reactContext;
@@ -113,13 +105,36 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
                 .put(Events.READY.toString(),
                         MapBuilder.of(
                                 "phasedRegistrationNames",
-                                MapBuilder.of("bubbled", "onReady")))
+                                MapBuilder.of("bubbled", "onStateChange")))
+                .put(Events.CONNECTING.toString(),
+                        MapBuilder.of(
+                                "phasedRegistrationNames",
+                                MapBuilder.of("bubbled", "onStateChange")))
+                .put(Events.STREAMING.toString(),
+                        MapBuilder.of(
+                                "phasedRegistrationNames",
+                                MapBuilder.of("bubbled", "onStateChange")))
+                .put(Events.SHUTDOWN.toString(),
+                        MapBuilder.of(
+                                "phasedRegistrationNames",
+                                MapBuilder.of("bubbled", "onStateChange")))
+                .put(Events.IOERROR.toString(),
+                        MapBuilder.of(
+                                "phasedRegistrationNames",
+                                MapBuilder.of("bubbled", "onStateChange")))
+                .put(Events.DISCONNECTED.toString(),
+                        MapBuilder.of(
+                                "phasedRegistrationNames",
+                                MapBuilder.of("bubbled", "onStateChange")))
+                .put(Events.STREAM_INFO_CHANGE.toString(),
+                        MapBuilder.of(
+                                "phasedRegistrationNames",
+                                MapBuilder.of("bubbled", "onStreamInfoChange")))
                 .build();
     }
 
     @ReactProp(name = "profile")
     public void setStreamingProfile(CameraPreviewFrameView view, @Nullable ReadableMap profile) {
-        Log.i(TAG, "setStreamingProfile");
         ReadableMap video = profile.getMap("video");
         ReadableMap audio = profile.getMap("audio");
         int encodingSize = profile.getInt("encodingSize");
@@ -136,7 +151,6 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
 
     @ReactProp(name = "rtmpURL")
     public void setPublishUrl(CameraPreviewFrameView view, String url) {
-        Log.i(TAG, "setPublishUrl : " + url);
         try {
             mProfile.setPublishUrl(url);
             mMediaStreamingManager.setStreamingProfile(mProfile);
@@ -147,7 +161,6 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
 
     @ReactProp(name = "camera")
     public void setCameraId(CameraPreviewFrameView view, String cameraId) {
-        Log.i(TAG, "switchCamera:" + cameraId);
         CameraStreamingSetting.CAMERA_FACING_ID facingId;
         if ("front".equals(cameraId)) {
             facingId = CameraStreamingSetting.CAMERA_FACING_ID.CAMERA_FACING_FRONT;
@@ -161,17 +174,14 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
 
     @ReactProp(name = "muted", defaultBoolean = false)
     public void setMuted(CameraPreviewFrameView view, boolean muted) {
-        Log.i(TAG, "setMuted : " + muted);
         mMediaStreamingManager.mute(muted);
     }
 
     @ReactProp(name = "zoom")
     public void setZoom(CameraPreviewFrameView view, int zoom) {
-        Log.i(TAG, "setZoom : " + zoom);
-        mCurrentZoom = zoom;
-        mCurrentZoom = Math.min(mCurrentZoom, mMaxZoom);
+        mCurrentZoom = Math.min(zoom, mMaxZoom);
         mCurrentZoom = Math.max(0, mCurrentZoom);
-        mMediaStreamingManager.setZoomValue(zoom);
+        mMediaStreamingManager.setZoomValue(mCurrentZoom);
     }
 
     @ReactProp(name = "focus")
@@ -196,7 +206,6 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
 
     @Override
     public void onHostResume() {
-        Log.i(TAG, "onResume");
         if (mMediaStreamingManager != null) {
             mMediaStreamingManager.resume();
         }
@@ -204,19 +213,25 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
 
     @Override
     public void onHostPause() {
-        Log.i(TAG, "onPause");
         mMediaStreamingManager.pause();
     }
 
     @Override
     public void onHostDestroy() {
-        Log.i(TAG, "onDestroy");
         mMediaStreamingManager.destroy();
         mMediaStreamingManager = null;
     }
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
+        if (mIsReady && mIsFocus) {
+            try {
+                mMediaStreamingManager.doSingleTapUp((int) e.getX(), (int) e.getY());
+            } catch (Exception ex) {
+                Log.e(TAG, ex.getMessage());
+            }
+            return true;
+        }
         return false;
     }
 
@@ -247,8 +262,17 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
     }
 
     @Override
+    public void notifyStreamStatusChanged(StreamingProfile.StreamStatus streamStatus) {
+        WritableMap event = Arguments.createMap();
+        event.putInt("videoFPS", streamStatus.videoFps);
+        event.putInt("audioFPS", streamStatus.audioFps);
+        event.putInt("totalBitrate", streamStatus.totalAVBitrate);
+        mEventEmitter.receiveEvent(getTargetId(), Events.STREAM_INFO_CHANGE.toString(), event);
+    }
+
+    @Override
     public void onStateChanged(StreamingState streamingState, Object extra) {
-        Log.i(TAG, "onStateChanged : " + streamingState.name());
+        WritableMap event = Arguments.createMap();
         switch (streamingState) {
             case PREPARING:
                 break;
@@ -258,49 +282,32 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
                 if (mIsStarted) {
                     startStreaming();
                 }
-                mEventEmitter.receiveEvent(getTargetId(), Events.READY.toString(), Arguments.createMap());
+                event.putInt("state", Events.READY.ordinal());
+                mEventEmitter.receiveEvent(getTargetId(), Events.READY.toString(), event);
                 break;
             case CONNECTING:
-                mEventEmitter.receiveEvent(getTargetId(), Events.CONNECTING.toString(), Arguments.createMap());
+                event.putString("state", Events.CONNECTING.toString());
+                mEventEmitter.receiveEvent(getTargetId(), Events.CONNECTING.toString(), event);
                 break;
             case STREAMING:
-                mEventEmitter.receiveEvent(getTargetId(), Events.STREAMING.toString(), Arguments.createMap());
+                event.putString("state", Events.STREAMING.toString());
+                mEventEmitter.receiveEvent(getTargetId(), Events.STREAMING.toString(), event);
                 break;
             case SHUTDOWN:
-                mEventEmitter.receiveEvent(getTargetId(), Events.SHUTDOWN.toString(), Arguments.createMap());
+                event.putString("state", Events.SHUTDOWN.toString());
+                mEventEmitter.receiveEvent(getTargetId(), Events.SHUTDOWN.toString(), event);
                 break;
             case IOERROR:
-                mEventEmitter.receiveEvent(getTargetId(), Events.IOERROR.toString(), Arguments.createMap());
-                break;
-            case UNKNOWN:
-                break;
-            case SENDING_BUFFER_EMPTY:
-                break;
-            case SENDING_BUFFER_FULL:
-                break;
-            case AUDIO_RECORDING_FAIL:
-                break;
-            case OPEN_CAMERA_FAIL:
+                event.putString("state", Events.IOERROR.toString());
+                mEventEmitter.receiveEvent(getTargetId(), Events.IOERROR.toString(), event);
                 break;
             case DISCONNECTED:
                 mEventEmitter.receiveEvent(getTargetId(), Events.DISCONNECTED.toString(), Arguments.createMap());
                 break;
-            case CAMERA_SWITCHED:
-                if (extra != null) {
-                    Log.i(TAG, "current camera id:" + (Integer) extra);
-                }
-                Log.i(TAG, "camera switched");
-                break;
-            case TORCH_INFO:
-                if (extra != null) {
-                    final boolean isSupportedTorch = (Boolean) extra;
-                    Log.i(TAG, "isSupportedTorch=" + isSupportedTorch);
-                }
-                break;
         }
     }
 
-    public int getTargetId() {
+    private int getTargetId() {
         return mCameraPreviewFrameView.getId();
     }
 
@@ -327,7 +334,7 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
                     .setContinuousFocusModeEnabled(true)
                     .setRecordingHint(false)
                     .setResetTouchFocusDelayInMs(3000)
-                    .setFocusMode(CameraStreamingSetting.FOCUS_MODE_CONTINUOUS_PICTURE)
+                    .setFocusMode(CameraStreamingSetting.FOCUS_MODE_CONTINUOUS_VIDEO)
                     .setCameraPrvSizeLevel(CameraStreamingSetting.PREVIEW_SIZE_LEVEL.MEDIUM)
                     .setCameraPrvSizeRatio(CameraStreamingSetting.PREVIEW_SIZE_RATIO.RATIO_16_9);
 
@@ -339,11 +346,11 @@ public class PLStreamingViewManager extends SimpleViewManager<CameraPreviewFrame
 
             mMediaStreamingManager.setStreamingSessionListener(this);
             mMediaStreamingManager.setStreamingStateListener(this);
+            mMediaStreamingManager.setStreamStatusCallback(this);
         }
     }
 
     private void startStreaming() {
-        Log.i(TAG, "startStreaming");
         new Thread(new Runnable() {
             @Override
             public void run() {
