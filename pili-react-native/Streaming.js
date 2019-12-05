@@ -11,10 +11,29 @@ import * as consts from './const'
 const PLRNMediaStreaming = requireNativeComponent('PLRNMediaStreaming')
 // const PLRNMediaStreaming = View
 
-export default function Streaming(props) {
-  return (
-    <PLRNMediaStreaming {...props} />
-  )
+export default class Streaming {
+
+  handleStateChange = (event) => {
+    if (this.props.onStateChange) {
+      this.props.onStateChange(event.nativeEvent.state)
+    }
+  }
+
+  handleStreamInfoChange = () => {
+    if (this.props.onStreamInfoChange) {
+      this.props.onStreamInfoChange(event.nativeEvent)
+    }
+  }
+
+  render() {
+    return (
+      <PLRNMediaStreaming
+        {...this.props}
+        onStateChange={this.handleStateChange}
+        onStreamInfoChange={this.handleStreamInfoChange}
+      />
+    )
+  }
 }
 
 Streaming.propTypes = {
@@ -38,5 +57,7 @@ Streaming.propTypes = {
   started: PropTypes.bool,
 
   onStateChange: PropTypes.func,
+  onStreamInfoChange: PropTypes.func,
+
   ...View.propTypes
 }
