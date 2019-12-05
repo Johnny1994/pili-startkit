@@ -21,7 +21,7 @@ export default class Streaming extends Component {
 
   handleStreamInfoChange = (event) => {
     if (this.props.onStreamInfoChange) {
-      this.props.onStreamInfoChange(event)
+      this.props.onStreamInfoChange(event.nativeEvent)
     }
   }
 
