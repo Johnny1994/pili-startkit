@@ -34,6 +34,7 @@ target 'pili_startkit' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   pod 'PLMediaStreamingKit'
+  pod 'pili-react-native', :path => '../node_modules/pili-streaming-react-native/ios/pili-react-native'
 
   target 'pili_startkitTests' do
     inherit! :search_paths
