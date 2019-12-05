@@ -43,7 +43,7 @@ RCT_EXPORT_VIEW_PROPERTY(zoom, NSNumber);
 RCT_EXPORT_VIEW_PROPERTY(focus, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(camera, NSString);
 RCT_EXPORT_VIEW_PROPERTY(onStateChange, RCTDirectEventBlock);
-RCT_EXPORT_VIEW_PROPERTY(onStateUpdate, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onStreamInfoChange, RCTDirectEventBlock)
 
 
 @end
