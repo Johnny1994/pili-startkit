@@ -12,7 +12,8 @@ export default class App extends Component {
 
   state = {
     androidPermissionGranted: false,
-    event: null,
+    state: null,
+    streamInfo: null,
     rtmpURL: 'rtmp://pili-publish.qnsdk.com/sdk-live/111',
     camera: 'back',
     muted: false,
@@ -57,7 +58,8 @@ export default class App extends Component {
     started: !this.state.started
   })
 
-  logEvent = event => this.setState({ event })
+  handleStateUpdate = state => this.setState({ state })
+  updateStreamInfo = streamInfo => this.setState({ streamInfo })
 
   componentDidMount() {
     if (isAndroid) {
@@ -86,11 +88,11 @@ export default class App extends Component {
       )
     }
 
-    const eventText = this.state.event != null ? JSON.stringify(this.state.event) : 'none'
-    const stateText = this.state.event != null ? this.state.event.state : 'none'
+    const stateText = this.state.state != null ? this.state.state : 'none'
+    const streamInfoText = this.state.streamInfoText != null ? JSON.stringify(this.state.streamInfo) : 'none'
     const props = {
       ...streamingConfig,
-      onStateChange: e => this.logEvent(e.nativeEvent),
+      onStateChange: this.handleStateUpdate,
       style: {
         width: '100%',
         height: 200,
@@ -112,8 +114,8 @@ export default class App extends Component {
           <Button onPress={this.toggleStarted} title={toggleStartBtnText} />
           <ScrollView style={{ flex: 1, backgroundColor : 'white'}}>
             <Text>Pili@ReactNative</Text>
-            <Text>Event: {eventText}</Text>
             <Text>State: {stateText}</Text>
+            <Text>StreamInfo: {streamInfoText}</Text>
             <Text>Props: </Text>
             <Text>{propsText}</Text>
           </ScrollView>
