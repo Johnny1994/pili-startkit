@@ -89,7 +89,7 @@ export default class App extends Component {
     }
 
     const stateText = this.state.state != null ? this.state.state : 'none'
-    const streamInfoText = this.state.streamInfoText != null ? JSON.stringify(this.state.streamInfo) : 'none'
+    const streamInfoText = this.state.streamInfo != null ? JSON.stringify(this.state.streamInfo) : 'none'
     const props = {
       ...streamingConfig,
       onStateChange: this.handleStateUpdate,

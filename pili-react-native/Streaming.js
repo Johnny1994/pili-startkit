@@ -3,7 +3,7 @@
  * @author nighca <nighca@live.cn>
  */
 
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { View, requireNativeComponent } from 'react-native'
 import * as consts from './const'
@@ -11,7 +11,7 @@ import * as consts from './const'
 const PLRNMediaStreaming = requireNativeComponent('PLRNMediaStreaming')
 // const PLRNMediaStreaming = View
 
-export default class Streaming {
+export default class Streaming extends Component {
 
   handleStateChange = (event) => {
     if (this.props.onStateChange) {
